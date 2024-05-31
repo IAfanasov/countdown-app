@@ -1,15 +1,10 @@
 "use client";
 
+import { CountdownEvent } from "@/app/typings";
 import { useEffect, useState } from "react";
 
-type Event = {
-  id: string;
-  name: string;
-  date: string;
-};
-
 type EventPageClientProps = {
-  event: Event;
+  event: CountdownEvent;
 };
 
 const EventPageClient: React.FC<EventPageClientProps> = ({ event }) => {
@@ -17,7 +12,7 @@ const EventPageClient: React.FC<EventPageClientProps> = ({ event }) => {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.startDate);
       const now = new Date();
       const timeDifference = eventDate.getTime() - now.getTime();
 
@@ -64,12 +59,11 @@ const EventPageClient: React.FC<EventPageClientProps> = ({ event }) => {
     const interval = setInterval(calculateTimeLeft, 1000); // Update every second
 
     return () => clearInterval(interval);
-  }, [event.date]);
+  }, [event.startDate]);
 
   return (
     <div>
-      <h1>{event.name}</h1>
-      <p>Time left until event: {timeLeft}</p>
+      <p>Tijd over tot {event.name[0]?.text}: {timeLeft}</p>
     </div>
   );
 };

@@ -1,23 +1,11 @@
-import { notFound } from 'next/navigation';
-import path from 'path';
-import fs from 'fs';
-import EventPageClient from './EventPageClient';
-
-type Event = {
-  id: string;
-  name: string;
-  date: string;
-};
-
-const getEventsData = () => {
-  const filePath = path.join(process.cwd(), 'src/data/events.json');
-  const jsonData = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(jsonData);
-};
+import { notFound } from "next/navigation";
+import EventPageClient from "./EventPageClient";
+import { CountdownEvent } from "@/app/typings";
+import { getEventsData } from "../../getEventsData";
 
 export async function generateStaticParams() {
-  const events: Event[] = getEventsData();
-  return events.map(event => ({
+  const events: CountdownEvent[] = getEventsData();
+  return events.map((event) => ({
     id: event.id,
   }));
 }
@@ -27,8 +15,8 @@ type EventPageProps = {
 };
 
 const EventPage = ({ params }: EventPageProps) => {
-  const events: Event[] = getEventsData();
-  const event = events.find(event => event.id === params.id);
+  const events: CountdownEvent[] = getEventsData();
+  const event = events.find((event) => event.id === params.id);
 
   if (!event) {
     notFound();
